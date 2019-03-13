@@ -1,11 +1,11 @@
 #include "dht_nonblocking.h"
 #define DHT_SENSOR_TYPE DHT_TYPE_11
-static const int DHT_SENSOR_PIN = 7;
+static const int DHT_SENSOR_PIN = 5; // matches D1 pin on esp8266
 DHT_nonblocking dht_sensor(DHT_SENSOR_PIN, DHT_SENSOR_TYPE);
 
 
 void setup(){
-    Serial.begin(9600);
+    Serial.begin(115200);
 }
 
 
@@ -43,11 +43,13 @@ void loop() {
     /* Measure temperature and humidity.  If the functions returns
     true, then a measurement is available. */
     if (measure_environment(&temperature, &humidity) == true) {
-        dtostrf(temperature, 5, 1, temp);
-        dtostrf(humidity, 5, 1, hum);
-        sprintf(msgT, "t%s", temp);
-        sprintf(msgH, "h%s", hum);
+        dtostrf(temperature, 2, 0, temp);
+        dtostrf(humidity, 2, 0, hum);
+        sprintf(msgT, "%s/%s", temp, hum);
         Serial.println(msgT);
-        Serial.println(msgH);
+        //sprintf(msgT, "t%s", temp);
+        //sprintf(msgH, "h%s", hum);
+        //Serial.println(msgT);
+        //Serial.println(msgH);
     }
 }
